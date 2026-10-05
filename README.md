@@ -7,8 +7,7 @@ Aplicativo acadêmico de lista de compras em React Native com expogo O objetivo 
 ## Iniciar no VS Code
 
 1. Instale o Node.js 24 LTS, disponível em https://nodejs.org/
-2. Extraia o ZIP. No VS Code, escolha **Arquivo > Abrir Pasta** e abra a pasta `CompraFacil`, que contém `package.json`
-3. Abra **Terminal > Novo Terminal** e execute:
+2. Abra **Terminal > Novo Terminal** e execute:
 
 ```bash
 npm install
