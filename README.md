@@ -4,19 +4,20 @@
 
 Aplicativo acadêmico em React Native com Expo Go. Organiza listas de compras e calcula o IMC. As listas ficam no aparelho via AsyncStorage; os cálculos de IMC são gravados no Cloud Firestore, com data e hora, e consultados em uma tela de histórico.
 
-**Configuração pendente:** o código da integração está implementado, mas um projeto Firebase precisa ser conectado e configurado para calcular, salvar e consultar o IMC. Veja [Configurar o Firebase](docs/FIREBASE.md). O fluxo de listas funciona independentemente dessa configuração.
+**Firebase configurado:** projeto `comprafacil-imc`, Firestore Standard em São Paulo e autenticação anônima. O arquivo `.env.example` contém a configuração pública do cliente para executar o trabalho; basta copiá-lo para `.env.local`, ignorado pelo Git. Não é necessário acessar a conta Firebase do grupo. O salvamento e a consulta já foram verificados contra o serviço real. Para usar um projeto próprio, veja [Configurar o Firebase](docs/FIREBASE.md).
 
 ## Iniciar no VS Code
 
 1. Instale o Node.js 24 LTS, disponível em https://nodejs.org/
-2. Abra **Terminal > Novo Terminal** e execute:
+2. Abra **Terminal > Novo Terminal** no diretório do projeto e execute no PowerShell:
 
-```bash
+```powershell
 npm ci
+Copy-Item .env.example .env.local
 npm run web
 ```
 
-Qr code as vezes carrega infinitamente, usar esse comando sempre funciona
+Em macOS/Linux, use `cp .env.example .env.local` para copiar a configuração. Para abrir no celular com Expo Go, execute `npm start` e leia o QR code. Se a conexão pela rede local não funcionar, tente o túnel:
 
 ```bash
 npx expo start --tunnel
@@ -54,9 +55,11 @@ A navegação usa Expo Router, com rotas em `src/app/`, cabeçalho e botão de v
 - `src/utils/imc.js`: validação, fórmula e formatação do IMC
 - `firestore.rules`: isolamento por usuário e validação dos registros
 - `.env.example`: variáveis de configuração do aplicativo Web do Firebase
+- `.firebaserc` e `firebase.json`: projeto e região do banco utilizado
 - `src/theme.js`: cores, tamanhos e estilos reutilizáveis
 - `tests/shopping.test.mjs`: verificações das regras de cálculo e alteração
 - `tests/imc.test.mjs`: fórmula, arredondamento, entradas inválidas e data
+- `tests/firebase.integration.mjs`: testes opcionais contra o Firebase real, com dados descartáveis
 - `docs/APRESENTACAO.md`: roteiro e explicação para a dupla
 
 ## Regras
@@ -77,10 +80,18 @@ Em **Histórico de IMC**, os registros aparecem do mais recente para o mais anti
 npm test
 npm run lint
 npm run typecheck
-npx expo export --platform all
+npx expo export --platform all --clear
 ```
 
 Veja [docs/VALIDACAO.md](docs/VALIDACAO.md) para os resultados observados e as limitações da validação.
+
+Para repetir os testes do serviço real, com `.env.local` preenchido:
+
+```bash
+npm run test:firebase
+```
+
+Esse comando cria contas anônimas e registros de teste no projeto configurado e remove os dados que criou ao terminar. Não faz parte de `npm test`, pois exige internet e acesso ao Firebase.
 
 
 ## Referências técnicas

@@ -34,7 +34,7 @@ Duração sugerida: 6 a 8 minutos, ajustável à orientação do professor.
 4. Reabra o app e confira o histórico. Demonstre cancelar e confirmar a exclusão de um registro de teste.
 5. Explique a identificação anônima, o isolamento dos históricos pelas regras e a necessidade de internet.
 
-O código da integração foi adicionado. A demonstração com dados reais depende da configuração descrita em `docs/FIREBASE.md`; não afirmar que foi validada sem executar o fluxo.
+A integração foi configurada e exercitada contra o projeto `comprafacil-imc`, incluindo salvamento pela interface, histórico com data e persistência após recarregar. Os testes do serviço também verificaram exclusão e isolamento dos usuários. Em outro computador, prepare `.env.local` conforme `docs/FIREBASE.md`. Ainda é necessário testar no aparelho usado na apresentação.
 
 ## Ambos — estrutura e encerramento
 
