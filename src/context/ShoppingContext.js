@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updateLists } from "../utils/shopping";
-const Context = createContext();
+const Context = createContext(null);
 const KEY = "@comprafacil:lists:v1";
 const example = [
   {

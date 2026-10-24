@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 import { Page, Button, Field } from "../components/UI";
 import { styles as s, colors } from "../theme";
 import { useShopping } from "../context/ShoppingContext";
 import { makeId, parseItem } from "../utils/shopping";
-export default function ItemScreen({ navigation, route }) {
-  const { listId, itemId } = route.params;
+export default function ItemScreen() {
+  const { listId, itemId } = useLocalSearchParams();
   const { lists, dispatch } = useShopping();
   const existing = lists
     .find((l) => l.id === listId)
@@ -31,7 +32,7 @@ export default function ItemScreen({ navigation, route }) {
         done: existing?.done || false,
       },
     });
-    navigation.goBack();
+    router.back();
   }
   return (
     <Page>
@@ -90,7 +91,7 @@ export default function ItemScreen({ navigation, route }) {
         </Text>
       )}
       <Button title="Salvar produto" onPress={save} />
-      <Button title="Cancelar" secondary onPress={() => navigation.goBack()} />
+      <Button title="Cancelar" secondary onPress={() => router.back()} />
       {!!existing && (
         <Button
           title="Excluir produto"
@@ -107,7 +108,7 @@ export default function ItemScreen({ navigation, route }) {
             danger
             onPress={() => {
               dispatch({ type: "deleteItem", listId, itemId });
-              navigation.goBack();
+              router.back();
             }}
           />
           <Button

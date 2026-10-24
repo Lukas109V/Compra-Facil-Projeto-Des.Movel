@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
+import { router } from "expo-router";
 import { Page, Button, Field, Empty } from "../components/UI";
 import { styles as s } from "../theme";
 import { useShopping } from "../context/ShoppingContext";
 import { totals, money, makeId } from "../utils/shopping";
-export function HomeScreen({ navigation }) {
+export function HomeScreen() {
   const { lists } = useShopping();
   const pending = lists.flatMap((l) => l.items).filter((i) => !i.done).length;
   return (
@@ -27,13 +28,19 @@ export function HomeScreen({ navigation }) {
       </View>
       <Button
         title="Ver minhas listas"
-        onPress={() => navigation.navigate("Lists")}
+        onPress={() => router.push("/listas")}
       />
       <Button
         title="Criar nova lista"
         secondary
-        onPress={() => navigation.navigate("NewList")}
+        onPress={() => router.push("/nova-lista")}
       />
+      <View style={s.card}>
+        <Text style={s.heading}>Calculadora de IMC</Text>
+        <Text style={s.subtitle}>Calcule seu IMC e acompanhe os valores registrados por data.</Text>
+        <Button title="Calcular IMC" onPress={() => router.push("/imc")} />
+        <Button title="Histórico de IMC" secondary onPress={() => router.push("/imc/historico")} />
+      </View>
       <View style={s.card}>
         <Text style={s.heading}>Do planejamento ao carrinho</Text>
         <Text style={s.subtitle}>1. Crie uma lista para cada compra.</Text>
@@ -45,12 +52,12 @@ export function HomeScreen({ navigation }) {
       <Button
         title="Sobre o aplicativo"
         secondary
-        onPress={() => navigation.navigate("About")}
+        onPress={() => router.push("/sobre")}
       />
     </Page>
   );
 }
-export function ListsScreen({ navigation }) {
+export function ListsScreen() {
   const { lists } = useShopping();
   return (
     <Page>
@@ -58,7 +65,7 @@ export function ListsScreen({ navigation }) {
       <Text style={s.subtitle}>Cada compra no seu lugar.</Text>
       <Button
         title="+ Nova lista"
-        onPress={() => navigation.navigate("NewList")}
+        onPress={() => router.push("/nova-lista")}
       />
       {lists.length === 0 && (
         <Empty
@@ -73,7 +80,7 @@ export function ListsScreen({ navigation }) {
             key={list.id}
             accessibilityRole="button"
             accessibilityLabel={`Abrir ${list.name}`}
-            onPress={() => navigation.navigate("Details", { listId: list.id })}
+            onPress={() => router.push({ pathname: "/detalhes", params: { listId: list.id } })}
             style={s.card}
           >
             <Text style={s.heading}>{list.name}</Text>
@@ -90,7 +97,7 @@ export function ListsScreen({ navigation }) {
     </Page>
   );
 }
-export function NewListScreen({ navigation }) {
+export function NewListScreen() {
   const { dispatch } = useShopping();
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -101,7 +108,7 @@ export function NewListScreen({ navigation }) {
     }
     const id = makeId();
     dispatch({ type: "addList", list: { id, name: name.trim(), items: [] } });
-    navigation.replace("Details", { listId: id });
+    router.replace({ pathname: "/detalhes", params: { listId: id } });
   }
   return (
     <Page>
@@ -122,14 +129,14 @@ export function NewListScreen({ navigation }) {
         </Text>
       )}
       <Button title="Criar lista" onPress={save} />
-      <Button title="Cancelar" secondary onPress={() => navigation.goBack()} />
+      <Button title="Cancelar" secondary onPress={() => router.back()} />
     </Page>
   );
 }
 export function AboutScreen() {
   return (
     <Page>
-      <Text style={s.eyebrow}>PROJETO ACADÊMICO • ETAPA 1</Text>
+      <Text style={s.eyebrow}>PROJETO ACADÊMICO</Text>
       <Text style={s.title}>CompraFácil</Text>
       <Text style={s.subtitle}>
         Uma forma simples de planejar as compras e acompanhar o que falta no
@@ -150,9 +157,11 @@ export function AboutScreen() {
       <View style={s.card}>
         <Text style={s.heading}>Seus dados</Text>
         <Text style={s.text}>
-          As listas ficam salvas neste dispositivo. Não há cadastro, servidor ou
-          compartilhamento entre aparelhos. Limpar os dados do aplicativo remove
-          as listas.
+          As listas ficam salvas neste dispositivo. Os cálculos de IMC ficam no
+          Firebase, com data e hora, vinculados a uma identificação anônima
+          persistida no aparelho. Você pode excluir registros no histórico.
+          Limpar os dados do aplicativo remove as listas e a identificação que
+          dá acesso ao seu histórico de IMC.
         </Text>
       </View>
       <Text style={s.subtitle}>
