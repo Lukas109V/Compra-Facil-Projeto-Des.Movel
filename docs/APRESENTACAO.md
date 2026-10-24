@@ -9,9 +9,9 @@ Duração sugerida: 6 a 8 minutos, ajustável à orientação do professor.
 
 1. Mostre o início e o resumo de produtos pendentes.
 2. Abra Minhas listas e crie a lista “Compra da apresentação”.
-3. Explique que há seis telas e que o React Navigation gerencia as rotas.
-4. Mostre `App.js`: cada `Stack.Screen` associa uma rota a um componente.
-5. Explique que `navigate` abre uma tela, `goBack` retorna e `replace` substitui o formulário pela lista criada.
+3. Explique que o Expo Router gerencia as telas usando arquivos em `src/app/`.
+4. Mostre `src/app/_layout.js`: cada `Stack.Screen` configura uma rota.
+5. Explique que `router.push` abre uma tela, `router.back` retorna e `router.replace` substitui o formulário pela lista criada.
 
 ## Gabriel — produtos, cálculos e persistência
 
@@ -24,7 +24,17 @@ Duração sugerida: 6 a 8 minutos, ajustável à orientação do professor.
 7. Feche e reabra o aplicativo para demonstrar o salvamento.
 8. Mostre a confirmação de exclusão e cancele antes de confirmar.
 
-“O estado das listas é compartilhado por um Context. As telas enviam ações como adicionar, editar e marcar. O código cria novas estruturas de dados para que o React atualize a interface. O AsyncStorage salva os dados localmente em JSON; não há backend nem consulta de preços.”
+“O estado das listas é compartilhado por um Context. As telas enviam ações como adicionar, editar e marcar. O código cria novas estruturas de dados para que o React atualize a interface. O AsyncStorage salva as listas localmente em JSON. O histórico de IMC usa o Firebase; não há consulta de preços.”
+
+## IMC e Firebase — após configurar o projeto
+
+1. Abra **Calcular IMC**, informe 70 kg e 1,75 m e confira 22,86.
+2. Mostre a confirmação de salvamento e o histórico com data e horário.
+3. Mostre o documento correspondente no Console do Firebase: `users/{uid}/imcRecords/{id}`.
+4. Reabra o app e confira o histórico. Demonstre cancelar e confirmar a exclusão de um registro de teste.
+5. Explique a identificação anônima, o isolamento dos históricos pelas regras e a necessidade de internet.
+
+O código da integração foi adicionado. A demonstração com dados reais depende da configuração descrita em `docs/FIREBASE.md`; não afirmar que foi validada sem executar o fluxo.
 
 ## Ambos — estrutura e encerramento
 
@@ -50,7 +60,7 @@ Mostrem a pasta `src`, os componentes reutilizáveis e a tela Sobre com os nomes
 
 **Como se calcula o total?** Somando quantidade multiplicada pelo preço unitário de cada produto; para o total comprado, entram apenas os marcados.
 
-**Por que não usar backend?** Não é solicitado nesta etapa; a persistência local atende ao uso individual previsto.
+**Onde os dados ficam?** As listas ficam no AsyncStorage. O valor do IMC, as medidas e a data ficam no Cloud Firestore, vinculados à identidade anônima do Firebase Authentication.
 
 **O aplicativo compartilha listas?** Não. Os dados ficam no aparelho ou navegador utilizado.
 
@@ -58,6 +68,7 @@ Mostrem a pasta `src`, os componentes reutilizáveis e a tela Sobre com os nomes
 
 ## Divisão sugerida para estudo
 
-Lucas: `App.js`, `MainScreens.js`, `UI.js` e `theme.js`.
+Lucas: `src/app/_layout.js`, `MainScreens.js`, `UI.js` e `theme.js`.
 Gabriel: `DetailsScreen.js`, `ItemScreen.js`, `ShoppingContext.js` e `shopping.js`.
+Ambos: `ImcScreen.js`, `ImcHistoryScreen.js`, `ImcContext.js`, `services/`, `imc.js` e `firestore.rules`.
 Ambos devem executar o fluxo completo e entender os demais arquivos. Esta divisão é uma sugestão de estudo, não uma declaração de autoria individual de trechos.

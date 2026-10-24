@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, Modal } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 import { Page, Button, Empty } from "../components/UI";
 import { styles as s, colors } from "../theme";
 import { useShopping } from "../context/ShoppingContext";
 import { totals, money } from "../utils/shopping";
-export default function DetailsScreen({ navigation, route }) {
+export default function DetailsScreen() {
   const { lists, dispatch } = useShopping();
-  const { listId } = route.params;
+  const { listId } = useLocalSearchParams();
   const [filter, setFilter] = useState("Todos");
   const [deleting, setDeleting] = useState(false);
   const list = lists.find((l) => l.id === listId);
@@ -19,7 +20,7 @@ export default function DetailsScreen({ navigation, route }) {
         />
         <Button
           title="Minhas listas"
-          onPress={() => navigation.navigate("Lists")}
+          onPress={() => router.replace("/listas")}
         />
       </Page>
     );
@@ -30,7 +31,7 @@ export default function DetailsScreen({ navigation, route }) {
   function remove() {
     setDeleting(false);
     dispatch({ type: "deleteList", listId });
-    navigation.popTo("Lists");
+    router.dismissTo("/listas");
   }
   return (
     <Page>
@@ -57,7 +58,7 @@ export default function DetailsScreen({ navigation, route }) {
       </View>
       <Button
         title="+ Adicionar produto"
-        onPress={() => navigation.navigate("Item", { listId })}
+        onPress={() => router.push({ pathname: "/produto", params: { listId } })}
       />
       <View style={[s.row, { flexWrap: "wrap" }]}>
         {["Todos", "Pendentes", "Comprados"].map((f) => (
@@ -144,7 +145,7 @@ export default function DetailsScreen({ navigation, route }) {
             title={`Editar ${item.name}`}
             secondary
             onPress={() =>
-              navigation.navigate("Item", { listId, itemId: item.id })
+              router.push({ pathname: "/produto", params: { listId, itemId: item.id } })
             }
           />
         </View>
