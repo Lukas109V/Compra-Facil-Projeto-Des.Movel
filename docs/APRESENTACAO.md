@@ -28,13 +28,24 @@ Duração sugerida: 6 a 8 minutos, ajustável à orientação do professor.
 
 ## IMC e Firebase — após configurar o projeto
 
-1. Abra **Calcular IMC**, informe 70 kg e 1,75 m e confira 22,86.
+1. Abra **Calcular IMC**, informe 70 kg e 1,75 m, selecione Masculino e confira 22,86.
 2. Mostre a confirmação de salvamento e o histórico com data e horário.
 3. Mostre o documento correspondente no Console do Firebase: `users/{uid}/imcRecords/{id}`.
 4. Reabra o app e confira o histórico. Demonstre cancelar e confirmar a exclusão de um registro de teste.
 5. Explique a identificação anônima, o isolamento dos históricos pelas regras e a necessidade de internet.
 
 A integração foi configurada e exercitada contra o projeto `comprafacil-imc`, incluindo salvamento pela interface, histórico com data e persistência após recarregar. Os testes do serviço também verificaram exclusão e isolamento dos usuários. Em outro computador, prepare `.env.local` conforme `docs/FIREBASE.md`. Ainda é necessário testar no aparelho usado na apresentação.
+
+## Consulta à API do World Bank
+
+1. Após o cálculo, mostre a classificação e o grupo da população brasileira com o mesmo sexo e faixa de IMC.
+2. Explique a chamada `fetch` em `src/services/worldBank.js`: país BRA, fonte 14, quatro indicadores de 2022 e resposta JSON.
+3. Demonstre Feminino e Masculino. Para o mesmo IMC, o percentual pode mudar porque as populações de referência são diferentes.
+4. Explique que sobrepeso ≥25 inclui obesidade ≥30: as parcelas são `100 − sobrepeso`, `sobrepeso − obesidade` e `obesidade`.
+5. Mostre o aviso de que a parcela abaixo de 25 inclui baixo peso e faixa normal. A API não fornece a separação entre esses grupos.
+6. Explique que falha do World Bank não desfaz o cálculo salvo e que consultar novamente os percentuais não cria outro registro.
+
+Consulte [WORLDBANK.md](WORLDBANK.md) para a requisição, exemplos e fontes.
 
 ## Ambos — estrutura e encerramento
 

@@ -1,0 +1,76 @@
+[
+  {
+    "page": 1,
+    "pages": 1,
+    "per_page": 100,
+    "total": 4,
+    "sourceid": null,
+    "lastupdated": "2026-10-14"
+  },
+  [
+    {
+      "indicator": {
+        "id": "SH.STA.OWAD.FE.ZS",
+        "value": "Prevalence of overweight, female (% of female adults)"
+      },
+      "country": {
+        "id": "BR",
+        "value": "Brazil"
+      },
+      "countryiso3code": "BRA",
+      "date": "2022",
+      "value": 64.38,
+      "unit": "",
+      "obs_status": "",
+      "decimal": 0
+    },
+    {
+      "indicator": {
+        "id": "SH.STA.OWAD.MA.ZS",
+        "value": "Prevalence of overweight, male (% of male adults)"
+      },
+      "country": {
+        "id": "BR",
+        "value": "Brazil"
+      },
+      "countryiso3code": "BRA",
+      "date": "2022",
+      "value": 61.42,
+      "unit": "",
+      "obs_status": "",
+      "decimal": 0
+    },
+    {
+      "indicator": {
+        "id": "SH.STA.OB18.FE.ZS",
+        "value": "Prevalence of obesity, female (% of female population ages 18+)"
+      },
+      "country": {
+        "id": "BR",
+        "value": "Brazil"
+      },
+      "countryiso3code": "BRA",
+      "date": "2022",
+      "value": 31.88,
+      "unit": "",
+      "obs_status": "",
+      "decimal": 1
+    },
+    {
+      "indicator": {
+        "id": "SH.STA.OB18.MA.ZS",
+        "value": "Prevalence of obesity, male (% of male population ages 18+)"
+      },
+      "country": {
+        "id": "BR",
+        "value": "Brazil"
+      },
+      "countryiso3code": "BRA",
+      "date": "2022",
+      "value": 24.16,
+      "unit": "",
+      "obs_status": "",
+      "decimal": 1
+    }
+  ]
+]

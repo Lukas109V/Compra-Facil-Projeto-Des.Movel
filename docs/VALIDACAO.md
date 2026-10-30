@@ -40,3 +40,18 @@ Servidor iniciado pelo script `npm run web -- --port 8081`, em `http://localhost
 - O gerenciador npm informou avisos de segurança na árvore de dependências. Não foi executado `npm audit fix` nem atualização geral fora da integração.
 
 Antes da apresentação, execute o checklist de [FIREBASE.md](FIREBASE.md) no aparelho que será utilizado. Os testes de isolamento cobrem os cenários descritos, sem constituir uma auditoria exaustiva das regras.
+
+## Integração World Bank — 30/10/2026
+
+- Consulta HTTP real dos quatro indicadores BRA/2022, fonte 14: sobrepeso feminino 64,38%, masculino 61,42%; obesidade feminina 31,88%, masculina 24,16%. O próprio serviço `getBrazilImcStatistics` também foi executado contra a API real.
+- `npm test`: **14 testes passaram**, incluindo nove novos testes de classificação, parcelas sem dupla contagem, parser com observações fora de ordem, dados inválidos/ausentes, contrato do `fetch`, erro HTTP/rede/JSON, prazo de 12 segundos e cancelamento.
+- `npm run lint` e `npm run typecheck`: passaram na versão final, sem alterar dependências ou regras do Firebase.
+- `npx expo export --platform all --clear`: bundles web, Android e iOS gerados com a integração do World Bank. A execução nativa em dispositivo continua não verificada.
+- Chrome, em `http://127.0.0.1:8081/imc`: seleção de sexo obrigatória; 70 kg / 1,75 m mostrou IMC 22,86 e 38,58% para Masculino; o mesmo cálculo mostrou 35,62% para Feminino. Ambos explicaram que o grupo abaixo de 25 inclui baixo peso e faixa normal.
+- 100 kg / 1,75 m, Feminino: IMC 32,65, obesidade, 31,88%. 119,99 kg / 2 m, Masculino: IMC exibido 30,00, classificação correta de sobrepeso pelo valor completo 29,9975, percentual 37,26% e explicação do arredondamento.
+- A captura de rede do Chrome confirmou resposta HTTP 200 da requisição conjunta à API do World Bank. Os percentuais da interface coincidiram com a resposta real.
+- Os quatro cálculos de demonstração apareceram no histórico com valor, medidas e data/hora. O formato dos documentos e as regras existentes do Firestore foram preservados. Os registros de demonstração permaneceram disponíveis nesse navegador.
+- Em largura de 390 px, a página não apresentou excesso horizontal (`clientWidth` e `scrollWidth` iguais a 390); as duas opções de sexo ficaram dentro da área visível, com `aria-checked` correspondente à seleção. A dimensão de teste foi restaurada.
+- Console capturado antes do recarregamento e consultado após os fluxos: nenhum erro do aplicativo nas amostras completas de até 100 entradas. Houve um aviso de desconexão do Metro durante o reinício intencional do servidor.
+- O estado visual de falha da API e seu retry não foram reproduzidos no navegador: a tentativa de bloqueio pelo depurador não interrompeu as consultas. HTTP/rede/JSON inválido, timeout e cancelamento foram verificados nos testes automatizados do serviço. As configurações temporárias de rede/cache foram restauradas.
+- Não houve execução em aparelho físico ou emulador Android/iOS nesta etapa.
