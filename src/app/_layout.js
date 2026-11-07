@@ -3,11 +3,12 @@ import { ActivityIndicator, Text, View } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ShoppingProvider, useShopping } from "../context/ShoppingContext";
 import { ImcProvider } from "../context/ImcContext";
 import { colors } from "../theme";
 
-export const unstable_settings = { initialRouteName: "index" };
+export const unstable_settings = { initialRouteName: "(drawer)" };
 
 function Routes() {
   const { ready, storageError } = useShopping();
@@ -26,25 +27,21 @@ function Routes() {
       headerShadowVisible: false,
       contentStyle: { backgroundColor: colors.background },
     }}>
-      <Stack.Screen name="index" options={{ title: "CompraFácil" }} />
-      <Stack.Screen name="listas" options={{ title: "Minhas listas" }} />
+      <Stack.Screen name="(drawer)" options={{ headerShown: false, title: "CompraFácil" }} />
       <Stack.Screen name="nova-lista" options={{ title: "Nova lista" }} />
       <Stack.Screen name="detalhes" options={{ title: "Minha compra" }} />
       <Stack.Screen name="produto" options={{ title: "Produto" }} />
-      <Stack.Screen name="sobre" options={{ title: "Sobre" }} />
-      <Stack.Screen name="imc/index" options={{ title: "Calculadora de IMC" }} />
-      <Stack.Screen name="imc/historico" options={{ title: "Histórico de IMC" }} />
     </Stack>
   </SafeAreaView>;
 }
 
 export default function RootLayout() {
-  return <SafeAreaProvider>
+  return <GestureHandlerRootView style={{ flex: 1 }}><SafeAreaProvider>
     <ShoppingProvider>
       <ImcProvider>
         <StatusBar style="dark" />
         <Routes />
       </ImcProvider>
     </ShoppingProvider>
-  </SafeAreaProvider>;
+  </SafeAreaProvider></GestureHandlerRootView>;
 }
