@@ -15,6 +15,7 @@ export default function MainDrawer() {
     drawerActiveBackgroundColor: "#EAF0EA",
     drawerInactiveTintColor: colors.ink,
     drawerStyle: { backgroundColor: colors.background },
+    overlayAccessibilityLabel: "Fechar menu de navegação",
     sceneStyle: { backgroundColor: colors.background },
   }}>
     <Drawer.Screen name="index" options={{ title: "CompraFácil", drawerLabel: "Início" }} />

@@ -59,7 +59,7 @@ export default function ImcHistoryScreen() {
   return (
     <Page>
       <ImcHeader history />
-      <Button title="Novo cálculo" onPress={() => router.dismissTo("/imc")} disabled={deleting} />
+      <Button title="Novo cálculo" onPress={() => router.navigate("/imc")} disabled={deleting} />
       {(connecting || loading) && <HistoryLoading />}
       <ConnectionStatus error={connectionError} connecting={connecting} onReconnect={reconnect} showConnecting={false} />
       {!!error && <ErrorText>{error}</ErrorText>}

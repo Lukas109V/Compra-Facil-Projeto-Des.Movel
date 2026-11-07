@@ -29,7 +29,10 @@ export const Subtitle = styled.Text({
   lineHeight: `${s.subtitle.lineHeight}px`,
 });
 export const Heading = styled.Text(s.heading);
-export const BodyText = styled.Text(s.text);
+export const BodyText = styled.Text({
+  ...s.text,
+  lineHeight: `${s.text.lineHeight}px`,
+});
 export const Label = styled.Text(s.label);
 export const ErrorText = styled.Text.attrs({ accessibilityRole: "alert" })({
   ...s.error,
