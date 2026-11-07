@@ -1,8 +1,21 @@
 # Plano de integração dos materiais de Desenvolvimento Móvel
 
-O Compra Fácil já implementa listas de compras, IMC com Firebase e consulta ao World Bank. O trabalho restante, considerando as partes explícitas do anexo, é integrar Drawer e Styled Components, preparar a atividade de filmes em sua base própria e consolidar a entrega final com documentação e validação móvel. Este documento especifica esse trabalho; nenhuma integração funcional foi executada nesta análise.
+O Compra Fácil já implementava listas de compras, IMC com Firebase e consulta ao World Bank. Este plano foi elaborado antes das integrações de Drawer, Styled Components e da atividade independente de filmes. A implementação foi autorizada em seguida; o andamento está registrado abaixo, e os resultados observados estão em [VALIDACAO.md](VALIDACAO.md).
 
 Base analisada: `main`, commit `6082676347439f4d672c4112e03a1d29a2231077`, em 07/11/2026. O usuário orientou priorizar as partes citadas no arquivo e fornecer os acréscimos individuais do professor depois. Esses acréscimos ficam fora do planejamento detalhado atual.
+
+### Andamento da implementação em 07/11/2026
+
+| Etapa | Resultado |
+| --- | --- |
+| A — Matriz/base | Registrada e preservada; sem mudança nos contratos das compras, IMC ou Firestore |
+| B — Drawer | Implementado com cinco destinos; URLs preservadas; formulários/detalhes continuam em Stack; validado no navegador |
+| C — Styled Components | Implementado em UI.js e componentes próprios do IMC; aparência, campos e interações conferidos |
+| D — Firebase/World Bank | Salvamento, histórico, exclusão, falha da API e retry sem duplicação validados pela interface Web; aparelho/gestos nativos pendentes |
+| E — FilmesRequest | Aplicativo independente em `atividades/filmesrequest`, com manifesto e pacote próprios; 17 testes e bundles nas três plataformas; consulta real TMDB adiada pelo usuário |
+| F — Entrega | Manual, roteiro e evidências atualizados; pacotes e conferência de reprodução registrados no relatório de implementação |
+
+O destino de filmes foi ajustado de pasta irmã/Snack para uma subpasta com projeto independente no mesmo repositório, permitindo commits conjuntos sem acoplar rotas, banco ou dependências ao Compra Fácil. As referências do anexo na seção seguinte são locais ao workspace da análise e não são necessárias para executar os aplicativos.
 
 ## 1. Fontes e limites
 

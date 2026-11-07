@@ -8,10 +8,10 @@ Duração sugerida: 6 a 8 minutos, ajustável à orientação do professor.
 “Nosso aplicativo se chama CompraFácil. Ele ajuda a organizar compras por listas, mostrando o que falta comprar e uma estimativa de custo. Escolhemos esse tema porque permite demonstrar navegação, formulários, estado e usabilidade com uma aplicação pequena e completa.”
 
 1. Mostre o início e o resumo de produtos pendentes.
-2. Abra Minhas listas e crie a lista “Compra da apresentação”.
+2. Abra o menu pelo botão no cabeçalho. Mostre Início, Minhas listas, Calcular IMC, Histórico e Sobre; depois abra Minhas listas e crie “Compra da apresentação”.
 3. Explique que o Expo Router gerencia as telas usando arquivos em `src/app/`.
-4. Mostre `src/app/_layout.js`: cada `Stack.Screen` configura uma rota.
-5. Explique que `router.push` abre uma tela, `router.back` retorna e `router.replace` substitui o formulário pela lista criada.
+4. Mostre `src/app/_layout.js` e `src/app/(drawer)/_layout.js`: o Drawer reúne as seções e o Stack abre os formulários/detalhes por cima. Os provedores ficam acima dos dois para preservar os dados.
+5. Explique que `router.push` abre uma tela, `router.back` retorna, `router.replace` substitui o formulário pela lista criada e `router.navigate` troca de destino do Drawer sem precisar recriar a calculadora.
 
 ## Gabriel — produtos, cálculos e persistência
 
@@ -50,6 +50,10 @@ Consulte [WORLDBANK.md](WORLDBANK.md) para a requisição, exemplos e fontes.
 ## Ambos — estrutura e encerramento
 
 Mostrem a pasta `src`, os componentes reutilizáveis e a tela Sobre com os nomes da dupla.
+
+Mostrem `src/components/UI.js` e `src/components/Imc.js`: os campos, botões, cartões e textos usam `styled-components/native` com os valores do tema existente. A seleção de sexo, o resultado/classificação, a comparação populacional e o cartão do histórico são componentes próprios; as telas coordenam os estados e as chamadas. Demonstrem a seleção visual e o estado desabilitado durante o salvamento.
+
+FilmesRequest é uma atividade independente em `atividades/filmesrequest`; não faz parte da proposta de compras. Sua demonstração de fetch/axios deve seguir as orientações específicas da Aula 05 de Novembro e requer configuração própria da TMDB.
 
 “A primeira etapa contém todas as telas planejadas e a navegação funcional. Incluímos estados vazios, validações, confirmação antes de excluir, filtros e salvamento local. Os preços são informados pelo usuário e os totais são estimativas.”
 

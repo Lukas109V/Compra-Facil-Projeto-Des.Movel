@@ -55,3 +55,42 @@ Antes da apresentação, execute o checklist de [FIREBASE.md](FIREBASE.md) no ap
 - Console capturado antes do recarregamento e consultado após os fluxos: nenhum erro do aplicativo nas amostras completas de até 100 entradas. Houve um aviso de desconexão do Metro durante o reinício intencional do servidor.
 - O estado visual de falha da API e seu retry não foram reproduzidos no navegador: a tentativa de bloqueio pelo depurador não interrompeu as consultas. HTTP/rede/JSON inválido, timeout e cancelamento foram verificados nos testes automatizados do serviço. As configurações temporárias de rede/cache foram restauradas.
 - Não houve execução em aparelho físico ou emulador Android/iOS nesta etapa.
+
+## Drawer e Styled Components — 07/11/2026
+
+### Código e verificações locais
+
+- Drawer com cinco destinos em `src/app/(drawer)/_layout.js`; Stack raiz preserva nova lista, detalhes e produto. Provedores permanecem acima dos navegadores e URLs/IDs não mudaram.
+- UI.js usa `styled-components/native`; Imc.js reúne cabeçalho, sexo, conexão, carregamento, resultado/classificação, comparação e cartão de histórico. Estado e chamadas permanecem nas telas; fórmulas, serviços e regras do banco não foram alterados.
+- `npm test`: **14 testes passaram**. Avisos preexistentes `MODULE_TYPELESS_PACKAGE_JSON` do Node não causaram falhas.
+- `npm run lint -- --no-cache`: passou. Após as correções finais, ESLint dos arquivos alterados passou novamente.
+- `npm run typecheck`: passou, inclusive após a correção da navegação de retorno do histórico.
+- `npx expo export --platform all --clear --output-dir .expo/integracao-20261107/export-final`: passou; bundles Web, Android e iOS gerados após as correções finais. O diretório de saída alternativo preservou `dist/` anterior, cuja substituição estava bloqueada pelo ambiente.
+- Revisão independente encontrou e corrigiu o retorno **Novo cálculo**: `dismissTo` gerava uma ação de Stack que o Drawer não trata. `router.navigate("/imc")` foi confirmado na interface, preservando peso, altura e sexo preenchidos.
+- O conversor de estilos exigia unidade no `lineHeight` dos componentes Styled. Subtitle, BodyText e ErrorText usam os valores do tema com `px`; os estilos nativos diretos permanecem numéricos.
+
+### Navegador e integrações
+
+- No Chrome, menu abriu e navegou; criação de lista e produto, validação de nome vazio e retorno aos detalhes funcionaram. Café de teste, quantidade 2 e preço 12,90, totalizou **R$ 25,80**, preservado após recarregar a URL de detalhes com listId.
+- Cálculo sintético de 70 kg / 1,75 m, Masculino, exibiu **22,86**, confirmou gravação no Firebase e mostrou **38,58%** via World Bank. O histórico persistiu após recarregar.
+- A conexão do navegador Chrome foi encerrada durante a sessão. A conferência final continuou no navegador interno, usando o bundle exportado e uma sessão própria, sem alterar dados preexistentes do usuário.
+- No bundle final, ida ao histórico e retorno por **Novo cálculo** preservaram as entradas. O menu exibiu os cinco destinos e os rótulos acessíveis de abrir/fechar em português.
+- World Bank bloqueado temporariamente pelo depurador: houve mensagem de falha, fim do carregamento e confirmação de que o cálculo permanecia salvo. Após remover o bloqueio, **Consultar percentuais novamente** retornou HTTP **200** e **38,58%**. O histórico mostrou **um único registro**, sem duplicação. Foram testados cancelar e confirmar a exclusão desse registro; a sessão terminou com histórico vazio.
+- Em viewport de **390 × 844**, largura do documento e scrollWidth foram iguais a 390. Seletores, campos e botões ficaram dentro da área horizontal. A configuração de viewport e o bloqueio de rede foram restaurados.
+- Console do bundle final, capturado antes dos fluxos e consultado depois: nenhuma entrada de erro ou warning na amostra completa de até 100 entradas. Esse resultado se refere à exportação de produção, não a uma auditoria de logs do serviço remoto.
+- Evidências: [Drawer em largura de celular](evidencias/drawer-mobile.png), [formulário do IMC](evidencias/imc-mobile.png).
+
+### FilmesRequest independente
+
+- Projeto em `atividades/filmesrequest`, com manifesto e lockfile próprios; sem novas rotas de filmes no Compra Fácil. A origem pública do Snack e a adaptação de SDK 54 para 57 estão documentadas em `ORIGEM.md` da atividade.
+- **17 testes offline**, lint, typecheck, compatibilidade Expo e exportação Web/Android/iOS passaram. Os testes cobrem os dois clientes, erros, vazio, ano, nota zero, poster ausente e nova requisição de detalhes.
+- No navegador, a configuração ausente mostrou a mensagem apropriada e liberou **Pesquisar** tanto em fetch quanto em axios. O checkbox alternou corretamente. Console consultado sem erros ou warnings na amostra capturada.
+- [Evidência da configuração pendente](evidencias/filmes-sem-configuracao.png). O usuário escolheu deixar a consulta TMDB real para depois; não foi reutilizada a chave do exemplo do professor. Resultados e Modal com dados reais permanecem não validados visualmente.
+
+### Limitações e dados de demonstração
+
+- Não houve execução em aparelho/emulador Android/iOS nem teste de gesto nativo. ADB não estava disponível no PATH ou no caminho padrão do SDK local. Os bundles nativos passaram, mas não substituem esse teste.
+- `npm run test:firebase` não foi repetido: as mudanças não alteraram os serviços/regras, e salvamento/leitura/exclusão reais foram exercitados pela interface com dados sintéticos. Os cenários de isolamento documentados anteriormente não foram reexecutados.
+- A sessão inicial do Chrome ficou com a lista local **Validação Drawer 07-11** (Café de teste) e um registro sintético de IMC às 18h22. A sessão final do navegador interno removeu apenas o próprio registro de retry. Não foi declarada limpeza dos dados da sessão Chrome após a conexão ser encerrada.
+- A instalação principal informou 27 vulnerabilidades na árvore npm. Não foi aplicada correção geral ou atualização de SDK fora do escopo. O relatório próprio de filmes registra os avisos da sua árvore separada.
+- Não houve publicação, push, envio ao AVA ou alteração de permissões/configuração remota.

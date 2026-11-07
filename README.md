@@ -38,16 +38,20 @@ npx expo start --tunnel
 | Histórico de IMC | Valor, data, horário, medidas e exclusão individual com confirmação |
 | Sobre | Objetivo, integrantes e explicação sobre armazenamento |
 
-A navegação usa Expo Router, com rotas em `src/app/`, cabeçalho e botão de voltar. Cadastro e edição compartilham a tela Produto. Há uma lista de exemplo somente no primeiro acesso. Depois de excluir todas as listas, elas permanecem vazias até o usuário criar outra.
+A navegação usa Expo Router. O botão de menu no cabeçalho abre o Drawer com Início, Minhas listas, Calcular IMC, Histórico de IMC e Sobre. Os formulários de nova lista, detalhes e produto abrem em uma pilha com botão de voltar. As URLs continuam iguais (`/listas`, `/imc`, `/imc/historico`, por exemplo). Cadastro e edição compartilham a tela Produto. Há uma lista de exemplo somente no primeiro acesso. Depois de excluir todas as listas, elas permanecem vazias até o usuário criar outra.
+
+O [manual de uso](docs/MANUAL_USUARIO.md) descreve os fluxos completos. A [atividade FilmesRequest](atividades/filmesrequest/README.md) é outro aplicativo, com instalação e configuração próprias, sem telas ou dependências de filmes no CompraFácil.
 
 ## Organização do código
 
 - `index.js`: entrada do Expo Router; `App.js` reexporta o layout
-- `src/app/_layout.js`: provedores e registro das rotas
+- `src/app/_layout.js`: provedores globais e pilha de formulários/detalhes
+- `src/app/(drawer)/_layout.js`: menu principal e destinos, mantendo as URLs públicas
 - `src/screens/MainScreens.js`: início, listas, nova lista e sobre
 - `src/screens/DetailsScreen.js`: itens, filtros, progresso e exclusão da lista
 - `src/screens/ItemScreen.js`: formulário de cadastro e edição
-- `src/components/UI.js`: botões, campos, página e mensagens de estado vazio
+- `src/components/UI.js`: botões, campos, página, cartões e textos com Styled Components
+- `src/components/Imc.js`: seleção de sexo, conexão, resultado, comparação e cartões do histórico
 - `src/context/ShoppingContext.js`: estado compartilhado e persistência local
 - `src/utils/shopping.js`: validação, cálculos e alterações imutáveis
 - `src/screens/ImcScreen.js`: formulário e confirmação de salvamento do IMC
