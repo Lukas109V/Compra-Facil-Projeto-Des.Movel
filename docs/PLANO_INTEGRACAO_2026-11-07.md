@@ -186,12 +186,15 @@ Na implementação, repetir os três comandos locais após cada etapa afetada. P
 
 Conclusão técnica das partes documentadas requer:
 
-- [ ] Drawer com pelo menos três telas e preservação dos fluxos atuais.
-- [ ] Componentes do IMC com uso real de Styled Components.
-- [ ] Compras, Firebase e World Bank verificados no estado integrado e no dispositivo escolhido.
-- [ ] FilmesRequest cobrindo os dois clientes e todos os critérios do enunciado, em sua entrega própria.
-- [ ] Manual, roteiro e pacote final atualizados e reproduzíveis.
-- [ ] Diff revisado; sem mudanças em fórmulas, dados existentes ou dependências fora do necessário.
+- [x] Drawer com cinco destinos e preservação dos fluxos atuais na Web.
+- [x] Componentes do IMC com uso real de Styled Components.
+- [x] Compras, Firebase e World Bank verificados no estado integrado pela interface Web, incluindo falha/retry sem duplicação.
+- [ ] Executar os cenários no aparelho escolhido e conferir gestos nativos.
+- [x] FilmesRequest com os dois clientes e critérios de serviço cobertos por testes offline, em sua entrega própria.
+- [ ] Conferir resultados/Modal com TMDB real; adiado pelo usuário até configurar chave própria.
+- [x] Manual e roteiro atualizados; pacotes gerados da versão validada.
+- [x] Pacotes conferidos em cópia limpa: npm ci, 14 testes, lint, typecheck e exportação Web passaram; integridade da atividade separada conferida.
+- [x] Diff revisado; contratos das fórmulas e dados preexistentes preservados; dependências restritas às integrações.
 
 A aderência aos pedidos individuais da primeira apresentação e a situação acadêmica das submissões permanecem pendentes para uma etapa posterior. Não marcar a entrega acadêmica inteira como concluída apenas porque os itens técnicos acima passaram.
 

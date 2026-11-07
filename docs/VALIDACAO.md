@@ -94,3 +94,11 @@ Antes da apresentação, execute o checklist de [FIREBASE.md](FIREBASE.md) no ap
 - A sessão inicial do Chrome ficou com a lista local **Validação Drawer 07-11** (Café de teste) e um registro sintético de IMC às 18h22. A sessão final do navegador interno removeu apenas o próprio registro de retry. Não foi declarada limpeza dos dados da sessão Chrome após a conexão ser encerrada.
 - A instalação principal informou 27 vulnerabilidades na árvore npm. Não foi aplicada correção geral ou atualização de SDK fora do escopo. O relatório próprio de filmes registra os avisos da sua árvore separada.
 - Não houve publicação, push, envio ao AVA ou alteração de permissões/configuração remota.
+
+### Reprodução dos pacotes em cópia limpa
+
+- Os ZIPs de origem foram gerados do commit `0e18614` com `git -c core.autocrlf=false archive`, preservando os bytes dos blobs. Os **93 arquivos** do projeto completo e os **28 arquivos** da atividade separada coincidiram byte a byte com o Git; a atividade isolada coincidiu com a subárvore do pacote completo. Caminhos/CRC conferidos, sem `.env.local`, `.git`, `node_modules`, caches ou `dist` nos arquivos entregues.
+- Extração em diretório novo sob `.expo/integracao-20261107/pacote-limpo/`. `npm ci` restaurou **923 pacotes**, exit 0, utilizando cache e temporários próprios da validação. A política padrão de scripts do npm foi mantida.
+- Na extração limpa passaram **14/14 testes**, **typecheck**, **lint** e **exportação Web com dois workers** (1.321 módulos). Não foi criado `.env.local` nessa conferência, nem feitas consultas reais aos serviços. Para uso normal, seguir a cópia da configuração cliente descrita no manual.
+- Fontes, manifestos e lockfiles permaneceram idênticos aos ZIPs após os comandos. Os resultados detalhados e logs foram preservados no diretório ignorado de validação.
+- A última atualização do plano e deste registro é exclusivamente documental. Os pacotes finais foram regenerados após esse registro; seus hashes exatos constam em `entregas/2026-11-07/SHA256SUMS.txt` na pasta superior ao repositório. A integridade foi conferida novamente, sem repetir testes cujas fontes/dependências permaneceram iguais.
