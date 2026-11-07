@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
-import { Button, Field, Page } from "../components/UI";
+import { Button, ErrorText, Field, Page, Subtitle } from "../components/UI";
+import { ConnectionStatus, ImcHeader, ImcResult, PopulationComparison, SexSelector } from "../components/Imc";
 import { useImc } from "../context/ImcContext";
 import { createImcRecord, imcErrorMessage, saveImcRecord } from "../services/imc";
 import { getBrazilImcStatistics } from "../services/worldBank";
-import { calculateImc, formatImc } from "../utils/imc";
+import { calculateImc } from "../utils/imc";
 import { compareImcWithPopulation, getImcClassification } from "../utils/imcPopulation";
-import { colors, styles as s } from "../theme";
 
 export default function ImcScreen() {
   const { user, connecting, error: connectionError, reconnect } = useImc();
@@ -91,72 +90,23 @@ export default function ImcScreen() {
 
   return (
     <Page>
-      <Text style={s.eyebrow}>CALCULADORA DE IMC</Text>
-      <Text style={s.title}>Registre seu cálculo.</Text>
-      <Text style={s.subtitle}>
-        Informe suas medidas e selecione o sexo para comparar com os dados do Brasil. Cada cálculo concluído fica salvo com data e hora.
-      </Text>
+      <ImcHeader />
       <Field label="Peso (kg)" placeholder="Ex.: 70" value={weight}
         onChangeText={(value) => edit(setWeight, value)} keyboardType="decimal-pad"
         maxLength={12} editable={!saving} />
       <Field label="Altura (m)" placeholder="Ex.: 1,75" value={height}
         onChangeText={(value) => edit(setHeight, value)} keyboardType="decimal-pad"
         maxLength={12} editable={!saving} />
-      <View>
-        <Text style={s.label}>Sexo para comparação</Text>
-        <View style={s.row} accessibilityRole="radiogroup" accessibilityLabel="Sexo para comparação">
-          {[{ value: "female", label: "Feminino" }, { value: "male", label: "Masculino" }].map((option) => (
-            <Pressable key={option.value} accessibilityRole="radio" accessibilityLabel={option.label}
-              aria-checked={sex === option.value}
-              accessibilityState={{ checked: sex === option.value, disabled: saving }} disabled={saving}
-              onPress={() => edit(setSex, option.value)}
-              style={({ pressed }) => [s.input, {
-                flex: 1, minHeight: 48, alignItems: "center", opacity: saving ? 0.45 : pressed ? 0.7 : 1,
-                borderColor: sex === option.value ? colors.primary : colors.border,
-                backgroundColor: sex === option.value ? "#EAF0EA" : colors.white,
-              }]}>
-              <Text style={[s.text, { fontWeight: sex === option.value ? "800" : "400" }]}>{option.label}</Text>
-            </Pressable>
-          ))}
-        </View>
-      </View>
-      <Text style={s.subtitle}>IMC = peso ÷ altura². Aceita vírgula ou ponto decimal. A comparação usa dados de adultos com 18 anos ou mais.</Text>
-      {!!connectionError && <View style={s.card}>
-        <Text accessibilityRole="alert" style={s.error}>{connectionError}</Text>
-        <Button title="Tentar conectar novamente" secondary onPress={reconnect} disabled={connecting} />
-      </View>}
-      {connecting && <Text accessibilityLiveRegion="polite" style={s.subtitle}>Conectando ao seu histórico…</Text>}
-      {!!error && <Text accessibilityRole="alert" style={s.error}>{error}</Text>}
+      <SexSelector value={sex} onChange={(value) => edit(setSex, value)} disabled={saving} />
+      <Subtitle>IMC = peso ÷ altura². Aceita vírgula ou ponto decimal. A comparação usa dados de adultos com 18 anos ou mais.</Subtitle>
+      <ConnectionStatus error={connectionError} connecting={connecting} onReconnect={reconnect} />
+      {!!error && <ErrorText>{error}</ErrorText>}
       <Button title={saving ? "Salvando cálculo…" : "Calcular e salvar"}
         onPress={calculate} disabled={saving || connecting || !user} />
-      {result && <View style={s.card} accessibilityLiveRegion="polite">
-        <Text style={s.eyebrow}>SEU IMC</Text>
-        <Text style={s.title}>{formatImc(result.value)}</Text>
-        <Text style={s.heading}>{classification}</Text>
-        {classification !== getImcClassification(result.value) && <Text style={s.subtitle}>
-          O valor exibido foi arredondado. A classificação considera o cálculo completo.
-        </Text>}
-        <Text style={s.text}>Cálculo salvo no histórico.</Text>
-      </View>}
-      {result && <View style={s.card} accessibilityLiveRegion="polite">
-        <Text style={s.eyebrow}>VOCÊ NA POPULAÇÃO BRASILEIRA</Text>
-        {population.loading && <Text style={s.subtitle}>Consultando dados do World Bank…</Text>}
-        {!!population.error && <>
-          <Text accessibilityRole="alert" style={s.error}>{population.error}</Text>
-          <Text style={s.text}>Seu cálculo continua salvo. Você pode consultar os percentuais novamente sem criar outro registro.</Text>
-          <Button title="Consultar percentuais novamente" secondary onPress={retryPopulation} />
-        </>}
-        {comparison && <>
-          <Text style={s.title}>{formatImc(comparison.percentage)}%</Text>
-          <Text style={s.text}>
-            Você se encaixa no grupo de {formatImc(comparison.percentage)}% de {result.sex === "female" ? "mulheres adultas" : "homens adultos"} no Brasil {comparison.group}.
-          </Text>
-          {comparison.includesUnderweight && <Text style={s.subtitle}>
-            Esse percentual inclui baixo peso e faixa normal. Os indicadores não permitem separar esses dois grupos.
-          </Text>}
-          <Text style={s.subtitle}>Fonte: World Bank / OMS · Brasil · {population.data.year} · adultos (18+).</Text>
-        </>}
-      </View>}
+      {result && <ImcResult value={result.value} classification={classification}
+        roundedClassification={getImcClassification(result.value)} />}
+      {result && <PopulationComparison population={population} comparison={comparison}
+        sex={result.sex} onRetry={retryPopulation} />}
       <Button title="Ver histórico de IMC" secondary onPress={() => router.push("/imc/historico")} disabled={saving} />
     </Page>
   );

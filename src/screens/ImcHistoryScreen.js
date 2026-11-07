@@ -1,11 +1,9 @@
 import React, { useCallback, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
 import { router, useFocusEffect } from "expo-router";
-import { Button, Empty, Page } from "../components/UI";
+import { Button, Empty, ErrorText, Page } from "../components/UI";
+import { ConnectionStatus, HistoryLoading, ImcHeader, ImcHistoryCard } from "../components/Imc";
 import { useImc } from "../context/ImcContext";
 import { deleteImcRecord, imcErrorMessage, listImcRecords } from "../services/imc";
-import { formatImc, formatImcDate } from "../utils/imc";
-import { colors, styles as s } from "../theme";
 
 export default function ImcHistoryScreen() {
   const { user, connecting, error: connectionError, reconnect } = useImc();
@@ -60,30 +58,17 @@ export default function ImcHistoryScreen() {
 
   return (
     <Page>
-      <Text style={s.eyebrow}>SEUS REGISTROS</Text>
-      <Text style={s.title}>Histórico de IMC</Text>
-      <Text style={s.subtitle}>Seus cálculos mais recentes aparecem primeiro.</Text>
+      <ImcHeader history />
       <Button title="Novo cálculo" onPress={() => router.dismissTo("/imc")} disabled={deleting} />
-      {(connecting || loading) && <ActivityIndicator accessibilityLabel="Carregando histórico" color={colors.primary} />}
-      {!!connectionError && <View style={s.card}>
-        <Text accessibilityRole="alert" style={s.error}>{connectionError}</Text>
-        <Button title="Tentar conectar novamente" secondary onPress={reconnect} disabled={connecting} />
-      </View>}
-      {!!error && <Text accessibilityRole="alert" style={s.error}>{error}</Text>}
+      {(connecting || loading) && <HistoryLoading />}
+      <ConnectionStatus error={connectionError} connecting={connecting} onReconnect={reconnect} showConnecting={false} />
+      {!!error && <ErrorText>{error}</ErrorText>}
       {!!user && <Button title="Atualizar histórico" secondary onPress={load} disabled={loading || deleting} />}
       {!loading && !connecting && !error && !connectionError && user && records.length === 0 &&
         <Empty title="Nenhum cálculo registrado" description="Faça seu primeiro cálculo para vê-lo aqui com a data e a hora." />}
-      {!loading && records.map((record) => <View key={record.id} style={s.card}>
-        <Text style={s.eyebrow}>IMC</Text>
-        <Text style={s.title}>{formatImc(record.value)}</Text>
-        <Text style={s.text}>{formatImcDate(record.calculatedAt)}</Text>
-        <Text style={s.subtitle}>{record.weight} kg • {record.height} m</Text>
-        {confirmId === record.id ? <>
-          <Text style={s.text}>Excluir este cálculo do histórico?</Text>
-          <Button title={deleting ? "Excluindo…" : "Confirmar exclusão"} danger onPress={remove} disabled={deleting} />
-          <Button title="Manter registro" secondary onPress={() => setConfirmId(null)} disabled={deleting} />
-        </> : <Button title="Excluir registro" secondary danger onPress={() => setConfirmId(record.id)} disabled={deleting} />}
-      </View>)}
+      {!loading && records.map((record) => <ImcHistoryCard key={record.id} record={record}
+        confirming={confirmId === record.id} deleting={deleting} onConfirm={remove}
+        onCancel={() => setConfirmId(null)} onRequestDelete={() => setConfirmId(record.id)} />)}
     </Page>
   );
 }
